@@ -1,4 +1,6 @@
 import { Application } from "express";
+import RefrashTokenUserController from "../controllers/refrashTokenUserController";
+
 import {
   createNewUserController,
   getAllUsersController,
@@ -11,6 +13,7 @@ import {
 const userRoutes = (app: Application) => {
   app.route("/users/register").post(createNewUserController);
   app.route("/users/login").post(auteheticateUserController);
+  app.route("/users/refresh-token").post(RefrashTokenUserController);
   app.route("/users").get(getAllUsersController);
   app
     .route("/users/:id")

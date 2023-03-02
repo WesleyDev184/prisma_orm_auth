@@ -1,13 +1,12 @@
 import { prisma } from "../prisma/prisma";
 import * as jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-
+import generateRefreshToken from "../provider/generateRefrashToken";
+import generateTokenProvider from "../provider/generateTokenProvider";
 interface User {
   email: string;
   password: string;
 }
-
-const SECRET = process.env.JWT_SECRET || "";
 
 export const authenticateUser = async ({ email, password }: User) => {
   const userFound = await prisma.user.findUnique({
@@ -18,9 +17,14 @@ export const authenticateUser = async ({ email, password }: User) => {
   const passwordMatch = await bcrypt.compare(password, userFound.password);
   if (!passwordMatch) throw new Error("User or password incorrect");
 
-  const token = jwt.sign({ id: userFound.id }, SECRET, {
-    expiresIn: "1d",
+  await prisma.refreshToken.deleteMany({
+    where: {
+      userId: userFound.id,
+    },
   });
 
-  return { token };
+  const token = generateTokenProvider(userFound.id);
+  const refreshToken = await generateRefreshToken(userFound.id);
+
+  return { token, refreshToken };
 };

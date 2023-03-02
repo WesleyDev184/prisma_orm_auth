@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  DB:
+    image: postgres:15.0-alpine
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "12345"
+    ports:
+      - "5432:5432"
+
+volumes:
+  data:

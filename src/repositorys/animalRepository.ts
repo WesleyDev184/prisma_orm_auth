@@ -18,3 +18,12 @@ export const getAnimals = async () => {
   const animals = await prisma.animal.findMany();
   return animals;
 };
+
+export const getAnimalByUserId = async (id: number) => {
+  const animal = await prisma.animal.findMany({
+    where: {
+      userId: id,
+    },
+  });
+  return animal;
+};

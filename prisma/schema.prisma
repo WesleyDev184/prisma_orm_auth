@@ -37,7 +37,7 @@ model RefreshToken {
 
 model Animal {
   id      String      @id @default(uuid())
-  number Int @unique
+  number Int? @unique
   type    String
   user   User  @relation(fields: [userId], references: [id])
   userId  Int
